@@ -135,9 +135,20 @@ public class UserEndpoints {
     return Response.status(400).entity("Endpoint not implemented yet").build();
   }
 
-  // TODO: Make the system able to update users
-  public Response updateUser(String x) {
+  // TODO: Make the system able to update users - FIXED
+  @PUT
+  @Path("/{userId/{token}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response updateUser(@PathParam("token") String token, String body) {
 
+    User user = new Gson().fromJson(body, User.class);
+
+    Boolean updated = UserController.updateUser(user, token);
+
+    if (updated) {
+      return Response.status(200).type(MediaType.APPLICATION_JSON).entity("The user has been updated").build();
+    }
+    else
     // Return a response with status 200 and JSON as type
     return Response.status(400).entity("Endpoint not implemented yet").build();
   }
