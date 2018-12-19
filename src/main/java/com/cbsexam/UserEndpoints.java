@@ -1,5 +1,6 @@
 package com.cbsexam;
 
+import cache.UserCache;
 import com.google.gson.Gson;
 import controllers.UserController;
 import java.util.ArrayList;
@@ -7,11 +8,14 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import model.User;
+import sun.nio.cs.ext.DoubleByte;
 import utils.Encryption;
 import utils.Log;
 
 @Path("user")
 public class UserEndpoints {
+
+  UserCache userCache = new UserCache();
 
   /**
    * @param idUser
@@ -105,12 +109,27 @@ public class UserEndpoints {
   }
 
 
-  // TODO: Make the system able to delete users
+  // TODO: Make the system able to delete users - FIXED
   @DELETE
   @Path("/delete")
 
   public Response deleteUser(String body) {
 
+    User user = new Gson().fromJson(body, User.class);
+
+    boolean userIsDeleted = UserController.delete(user);
+
+    String token = UserController.loginUser(user);
+
+
+    userCache.getUsers(true);
+
+    if (userIsDeleted == true) {
+      return Response.status(200).entity("The User ID is deleted").build();
+    } else {
+      return Response.status(400).entity("Unnable to delete user").build();
+
+    }
 
     // Return a response with status 200 and JSON as type
     return Response.status(400).entity("Endpoint not implemented yet").build();
