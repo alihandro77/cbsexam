@@ -6,7 +6,7 @@ import utils.Config;
 
 import java.util.ArrayList;
 
-//TODO: Build this cache and use it.
+//TODO: Build this cache and use it. - FIXED
 
 public class OrderCache {
 
@@ -39,7 +39,7 @@ public class OrderCache {
         }
 
         //Nu returnerer vi vores dokumenter
-        return this.orders;  
+        return this.orders;
 
 
     }
